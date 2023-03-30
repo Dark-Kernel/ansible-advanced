@@ -1,0 +1,19 @@
+    - name: Update and upgrade system
+      command: apt update --fix-missing -y
+
+    - name: Installation of dependencies.
+      apt:
+        name: '{{ item }}'
+        state: installed
+      with_items:
+        - python
+        - sudo
+        - python3-pip
+        - git
+        - python3-mysqldb
+        - python-setuptools
+        - python-dev
+        - build-essential
+        - python-pip
+        - curl
+

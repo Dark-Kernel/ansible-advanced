@@ -1,0 +1,20 @@
+    - name: Install Mysql
+      apt:
+        name: '{{ item }}'
+        state: installed
+      with_items:
+        - mysql-server
+        - mysql-client
+
+    - name: Start mysql service
+      service:
+        name: mysql
+        state: started
+        enabled: yes
+
+    - name: start
+      command: sudo service mysql start
+
+    - name: Create Application Database
+      mysql_db: name=employee_db state=present
+

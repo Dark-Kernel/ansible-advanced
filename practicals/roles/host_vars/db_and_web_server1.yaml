@@ -1,0 +1,6 @@
+# This is of no use once group_vars is used.
+
+db_user: john
+db_user_pass: pass
+db_name: johndb
+

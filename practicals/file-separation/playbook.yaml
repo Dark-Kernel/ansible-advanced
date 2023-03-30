@@ -1,0 +1,26 @@
+- name: Deploy a web Application.
+  hosts: db_and_web_server1
+  tasks:
+    - name: Update and upgrade system
+      command: apt update --fix-missing -y
+
+    - name: Installation of dependencies.
+      apt:
+        name: '{{ item }}'
+        state: installed
+      with_items:
+        - python
+        - sudo
+        - python3-pip
+        - git
+        - python3-mysqldb
+        - python-setuptools
+        - python-dev
+        - build-essential
+        - python-pip
+        - curl
+    
+    - include: tasks/deploy_db.yaml
+    - include: tasks/deploy_web.yaml
+
+    

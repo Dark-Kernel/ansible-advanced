@@ -1,0 +1,18 @@
+    - name: Python dependencies
+      pip:
+        name: '{{ item }}'
+        state: present
+      with_items:
+        - flask
+        - flask-mysql
+
+    - name: Copy app
+      copy: src=app.py dest=/opt/app.py
+          #- name: Clone the repo
+          #git:
+          #repo: https://github.com/mmumshad/simple-webapp-flask.git
+          #dest: /root/simple-webapp-flask
+
+    - name: Start the webserver
+      shell: FLASK_APP=/opt/app.py nohup flask run --host=0.0.0.0 &
+

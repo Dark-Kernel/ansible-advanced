@@ -1,0 +1,6 @@
+# This is common variables for the group db_and_web_servers.
+
+db_user: john
+db_user_pass: pass
+db_name: johndb
+

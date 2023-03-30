@@ -1,0 +1,70 @@
+- name: Deploy a web Application.
+  hosts: target3
+  tasks:
+    - name: Update and upgrade system
+      command: apt update --fix-missing -y
+
+
+    - name: Ping
+      apt:
+        name: '{{ item }}'
+        state: installed
+      with_items:
+        - python
+        - sudo
+        - python3-pip
+        - git
+        - python3-mysqldb
+        - python-setuptools
+        - python-dev
+        - build-essential
+        - python-pip
+        - curl
+
+
+    - name: Install Mysql
+      apt:
+        name: '{{ item }}'
+        state: installed
+      with_items:
+        - mysql-server
+        - mysql-client
+
+    - name: Start mysql service
+      service:
+        name: mysql
+        state: started
+        enabled: yes
+    
+    - name: start
+      command: sudo service mysql start
+
+    - name: Create Application User
+      mysql_user:
+        name: '{{ db_user }}'
+        password: '{{ db_user_pass }}'
+        priv: '*.*:ALL'
+        state: present
+        host: '%'
+
+    - name: Create Application Database
+      mysql_db: name={{ db_name }} state=present
+
+    - name: Python dependencies
+      pip:
+        name: '{{ item }}'
+        state: present
+      with_items:
+        - flask
+        - flask-mysql
+
+    - name: Copy app
+      copy: src=app.py dest=/opt/app.py
+          #- name: Clone the repo
+          #git:
+          #repo: https://github.com/mmumshad/simple-webapp-flask.git
+          #dest: /root/simple-webapp-flask
+
+    - name: Start the webserver
+      shell: FLASK_APP=/opt/app.py nohup flask run --host=0.0.0.0 &
+
